@@ -1,0 +1,1138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>BIO201B · Lab 1 — Biologically Important Molecules</title>
+<style>
+:root{
+  --bg:#f6f1e7;
+  --bg-soft:#efe7d8;
+  --card:#fffdf8;
+  --card-border:#e2d6bd;
+  --text:#241f18;
+  --text-dim:#6b6152;
+  --line:#ddd0b2;
+  --accent-carb:#c07a12;
+  --accent-carb-soft:#f3ddb1;
+  --accent-protein:#7b3fa0;
+  --accent-protein-soft:#e6d6f2;
+  --accent-lipid:#c2432b;
+  --accent-lipid-soft:#f3d3c8;
+  --accent-nucleic:#22648a;
+  --accent-nucleic-soft:#cfe3ee;
+  --pos:#2f7a3c;
+  --pos-soft:#d9ecd9;
+  --neg:#a33636;
+  --neg-soft:#f2dada;
+  --shadow: 0 1px 2px rgba(40,30,10,0.06), 0 8px 24px -12px rgba(40,30,10,0.18);
+  --radius: 16px;
+  --font-serif: Georgia, 'Iowan Old Style', 'Palatino Linotype', serif;
+  --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  padding-top: env(safe-area-inset-top, 0px);
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#191510;
+    --bg-soft:#221c15;
+    --card:#241e17;
+    --card-border:#3a2f22;
+    --text:#f1e9db;
+    --text-dim:#b3a68e;
+    --line:#3a2f22;
+    --accent-carb-soft:#3a2c12;
+    --accent-protein-soft:#2e2338;
+    --accent-lipid-soft:#3a2118;
+    --accent-nucleic-soft:#152531;
+    --pos-soft:#16301c;
+    --neg-soft:#3a1c1c;
+    --shadow: 0 1px 2px rgba(0,0,0,0.3), 0 12px 30px -14px rgba(0,0,0,0.6);
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#191510;
+  --bg-soft:#221c15;
+  --card:#241e17;
+  --card-border:#3a2f22;
+  --text:#f1e9db;
+  --text-dim:#b3a68e;
+  --line:#3a2f22;
+  --accent-carb-soft:#3a2c12;
+  --accent-protein-soft:#2e2338;
+  --accent-lipid-soft:#3a2118;
+  --accent-nucleic-soft:#152531;
+  --pos-soft:#16301c;
+  --neg-soft:#3a1c1c;
+  --shadow: 0 1px 2px rgba(0,0,0,0.3), 0 12px 30px -14px rgba(0,0,0,0.6);
+}
+*{box-sizing:border-box;}
+html,body{height:100%;}
+body{
+  margin:0;
+  background:var(--bg);
+  color:var(--text);
+  font-family:var(--font-sans);
+  -webkit-font-smoothing:antialiased;
+  scroll-padding-top: env(safe-area-inset-top, 0px);
+}
+html{scroll-padding-top: env(safe-area-inset-top, 0px);}
+img,svg{max-width:100%;}
+button{font-family:inherit;}
+
+/* ---------- layout shell ---------- */
+.wrap{max-width:1080px;margin:0 auto;padding:0 20px 64px;}
+header.top{
+  position:sticky;top:0;z-index:40;
+  padding-top: calc(env(safe-area-inset-top, 0px) + 14px);
+  padding-bottom:14px;
+  background:linear-gradient(var(--bg) 82%, transparent);
+  backdrop-filter: blur(6px);
+}
+.top-row{display:flex;align-items:flex-start;justify-content:space-between;gap:14px;max-width:1080px;margin:0 auto;padding:0 20px;}
+.brand{display:flex;gap:12px;align-items:center;}
+.brand-mark{
+  width:42px;height:42px;border-radius:11px;flex:none;
+  background:linear-gradient(135deg,var(--accent-carb),var(--accent-nucleic));
+  display:flex;align-items:center;justify-content:center;font-size:20px;
+  box-shadow: var(--shadow);
+}
+.brand h1{font-family:var(--font-serif);font-size:19px;line-height:1.15;margin:0;font-weight:700;}
+.brand p{margin:2px 0 0;font-size:12px;color:var(--text-dim);}
+.theme-btn{
+  border:1px solid var(--card-border);background:var(--card);color:var(--text);
+  width:38px;height:38px;border-radius:50%;cursor:pointer;font-size:16px;
+  display:flex;align-items:center;justify-content:center;box-shadow:var(--shadow);
+  flex:none;
+}
+nav.tabs{
+  max-width:1080px;margin:14px auto 0;padding:0 20px;
+  display:flex;gap:8px;overflow-x:auto;scrollbar-width:none;
+}
+nav.tabs::-webkit-scrollbar{display:none;}
+nav.tabs button{
+  border:1px solid var(--card-border);
+  background:var(--card);
+  color:var(--text-dim);
+  padding:9px 16px;border-radius:999px;font-size:13.5px;font-weight:600;
+  white-space:nowrap;cursor:pointer;transition:all .15s ease;flex:none;
+}
+nav.tabs button.active{
+  background:var(--text);color:var(--bg);border-color:var(--text);
+}
+
+main{padding-top:18px;}
+.view{display:none;animation:fade .25s ease;}
+.view.active{display:block;}
+@keyframes fade{from{opacity:0;transform:translateY(4px);}to{opacity:1;transform:translateY(0);}}
+
+h2.section-title{font-family:var(--font-serif);font-size:24px;margin:4px 0 4px;}
+p.section-sub{color:var(--text-dim);font-size:14px;margin:0 0 20px;max-width:64ch;}
+
+/* ---------- cards / generic ---------- */
+.card{
+  background:var(--card);border:1px solid var(--card-border);
+  border-radius:var(--radius);box-shadow:var(--shadow);
+}
+.pill{
+  display:inline-flex;align-items:center;gap:6px;
+  font-size:11.5px;font-weight:700;letter-spacing:.02em;text-transform:uppercase;
+  padding:3px 10px;border-radius:999px;
+}
+.pill.pos{background:var(--pos-soft);color:var(--pos);}
+.pill.neg{background:var(--neg-soft);color:var(--neg);}
+.pill.pos-ctrl{background:var(--pos-soft);color:var(--pos);border:1px dashed var(--pos);}
+.pill.neg-ctrl{background:var(--neg-soft);color:var(--neg);border:1px dashed var(--neg);}
+
+/* ---------- cheat sheet ---------- */
+.legend-row{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:22px;}
+.legend-chip{
+  display:flex;align-items:center;gap:7px;font-size:12.5px;color:var(--text-dim);
+  background:var(--bg-soft);border:1px solid var(--card-border);padding:6px 11px;border-radius:999px;
+}
+.legend-dot{width:10px;height:10px;border-radius:50%;flex:none;}
+
+.controls-box{
+  padding:16px 18px;margin-bottom:22px;
+}
+.controls-box h3{margin:0 0 8px;font-size:14.5px;}
+.controls-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:10px;}
+.controls-grid div{font-size:13px;color:var(--text-dim);line-height:1.5;}
+.controls-grid b{color:var(--text);}
+@media (max-width:560px){.controls-grid{grid-template-columns:1fr;}}
+
+.sheet-table{width:100%;border-collapse:collapse;overflow:hidden;border-radius:var(--radius);}
+.sheet-table thead th{
+  text-align:left;font-size:11px;text-transform:uppercase;letter-spacing:.04em;
+  color:var(--text-dim);padding:10px 12px;border-bottom:1px solid var(--line);
+}
+.sheet-table tbody td{
+  padding:12px;font-size:13px;border-bottom:1px solid var(--line);vertical-align:top;
+}
+.sheet-table tbody tr:last-child td{border-bottom:none;}
+.sheet-table tbody tr{background:var(--card);}
+.test-name{font-weight:700;font-size:13.5px;}
+.test-name small{display:block;font-weight:400;color:var(--text-dim);font-size:11px;margin-top:2px;}
+.swatch-inline{display:inline-flex;align-items:center;gap:6px;font-size:12.5px;}
+.swatch-dot{width:13px;height:13px;border-radius:4px;border:1px solid rgba(0,0,0,.15);flex:none;}
+.sheet-scroll{overflow-x:auto;}
+.sheet-scroll .card{min-width:760px;}
+
+/* ---------- lab / test tube simulator ---------- */
+.test-picker{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:18px;}
+.test-picker button{
+  border:1px solid var(--card-border);background:var(--card);color:var(--text-dim);
+  padding:10px 14px;border-radius:12px;cursor:pointer;font-size:13px;font-weight:700;
+  display:flex;align-items:center;gap:8px;
+}
+.test-picker button .dot{width:9px;height:9px;border-radius:50%;}
+.test-picker button.active{color:var(--text);box-shadow:var(--shadow);}
+
+.lab-panel{display:grid;grid-template-columns:1.15fr 1fr;gap:18px;align-items:flex-start;}
+@media (max-width:800px){.lab-panel{grid-template-columns:1fr;}}
+
+.rack-card{padding:18px;}
+.rack-head{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;margin-bottom:14px;flex-wrap:wrap;}
+.rack-head h3{margin:0 0 4px;font-size:16px;}
+.rack-head p{margin:0;font-size:12.5px;color:var(--text-dim);max-width:44ch;}
+.procedure-box{margin-bottom:16px;border:1px solid var(--card-border);border-radius:12px;padding:10px 14px;background:var(--bg-soft);}
+.procedure-box summary{cursor:pointer;font-size:13px;font-weight:700;color:var(--text);}
+.procedure-box summary::marker{color:var(--text-dim);}
+.procedure-box ol{margin:10px 0 2px;padding-left:18px;font-size:12.5px;color:var(--text-dim);line-height:1.65;}
+.procedure-box li{margin-bottom:3px;}
+.run-btn{
+  border:none;border-radius:10px;padding:10px 16px;font-size:13px;font-weight:700;cursor:pointer;
+  background:var(--text);color:var(--bg);flex:none;
+}
+.run-btn[disabled]{opacity:.5;cursor:default;}
+.tube-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(74px,1fr));gap:12px;}
+.tube-slot{display:flex;flex-direction:column;align-items:center;gap:6px;cursor:pointer;border:none;background:none;padding:4px;border-radius:12px;}
+.tube-slot:hover, .tube-slot.selected{background:var(--bg-soft);}
+.tube-slot .tube-label{font-size:10.5px;color:var(--text-dim);text-align:center;line-height:1.2;max-width:80px;}
+.tube-slot .tube-num{font-size:10px;font-weight:700;color:var(--text-dim);}
+
+.tube{
+  width:30px;height:66px;
+  border-radius:0 0 14px 14px;
+  border:2px solid var(--line);
+  border-top:none;
+  position:relative;overflow:hidden;background:var(--bg-soft);
+}
+.tube::before{
+  content:"";position:absolute;top:-2px;left:-4px;right:-4px;height:6px;
+  border:2px solid var(--line);border-bottom:none;border-radius:4px 4px 0 0;background:var(--card);
+}
+.tube-liquid{
+  position:absolute;left:0;right:0;bottom:0;
+  transition:height .5s ease, background .6s ease;
+  height:14%;background:#cfd6da;
+}
+.tube-liquid.layer2{position:absolute;left:0;right:0;transition:background .6s ease,height .5s ease;}
+.tube-glint{position:absolute;top:6px;left:5px;width:4px;height:60%;background:rgba(255,255,255,.35);border-radius:3px;}
+
+.detail-card{padding:18px;position:sticky;top:150px;}
+.detail-card h3{margin:0 0 2px;font-size:16px;}
+.detail-card .sub{font-size:12px;color:var(--text-dim);margin:0 0 12px;}
+.detail-row{display:flex;justify-content:space-between;gap:10px;padding:9px 0;border-bottom:1px solid var(--line);font-size:13px;}
+.detail-row:last-of-type{border-bottom:none;}
+.detail-row span:first-child{color:var(--text-dim);}
+.detail-row span:last-child{font-weight:600;text-align:right;}
+.detail-note{margin-top:12px;font-size:12.5px;line-height:1.55;color:var(--text-dim);background:var(--bg-soft);padding:12px;border-radius:10px;}
+.detail-empty{font-size:13px;color:var(--text-dim);padding:30px 10px;text-align:center;}
+
+/* ---------- unknown challenge ---------- */
+.mystery-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px;margin-bottom:20px;}
+.mystery-card{
+  padding:14px;cursor:pointer;text-align:left;border:1px solid var(--card-border);
+  background:var(--card);border-radius:14px;box-shadow:var(--shadow);
+}
+.mystery-card.selected{outline:2px solid var(--text);}
+.mystery-card h4{margin:0 0 4px;font-size:14px;}
+.mystery-card p{margin:0;font-size:11.5px;color:var(--text-dim);}
+.mystery-card .status{margin-top:8px;font-size:11px;font-weight:700;}
+.mystery-card .status.solved{color:var(--pos);}
+.mystery-card .status.open{color:var(--text-dim);}
+
+.workbench{padding:18px;display:grid;grid-template-columns:1fr 1fr;gap:18px;}
+@media (max-width:760px){.workbench{grid-template-columns:1fr;}}
+.workbench h3{margin:0 0 10px;font-size:15px;}
+.reagent-row{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px;}
+.reagent-row button{
+  border:1px solid var(--card-border);background:var(--bg-soft);color:var(--text);
+  padding:8px 12px;border-radius:10px;font-size:12.5px;font-weight:600;cursor:pointer;
+}
+.reagent-row button[disabled]{opacity:.4;cursor:default;text-decoration:line-through;}
+.notebook{font-size:12.5px;line-height:1.5;}
+.notebook-entry{display:flex;gap:8px;padding:8px 0;border-bottom:1px solid var(--line);align-items:flex-start;}
+.notebook-entry:last-child{border-bottom:none;}
+.notebook-swatch{width:16px;height:16px;border-radius:4px;flex:none;margin-top:1px;border:1px solid rgba(0,0,0,.15);}
+.guess-row{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px;}
+.guess-row button{
+  border:1px solid var(--card-border);background:var(--card);color:var(--text);
+  padding:8px 12px;border-radius:10px;font-size:12px;font-weight:600;cursor:pointer;
+}
+.guess-row button.correct{background:var(--pos-soft);border-color:var(--pos);color:var(--pos);}
+.guess-row button.wrong{background:var(--neg-soft);border-color:var(--neg);color:var(--neg);}
+.score-strip{display:flex;gap:18px;font-size:12.5px;color:var(--text-dim);margin-bottom:16px;flex-wrap:wrap;}
+.score-strip b{color:var(--text);font-size:15px;}
+
+/* ---------- flashcards ---------- */
+.filter-row{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:18px;}
+.filter-row button{
+  border:1px solid var(--card-border);background:var(--card);color:var(--text-dim);
+  padding:7px 13px;border-radius:999px;font-size:12.5px;font-weight:600;cursor:pointer;
+}
+.filter-row button.active{background:var(--text);color:var(--bg);border-color:var(--text);}
+.flash-wrap{display:flex;flex-direction:column;align-items:center;gap:16px;}
+.flash-scene{width:100%;max-width:560px;perspective:1400px;}
+.flash-card{
+  position:relative;width:100%;min-height:230px;cursor:pointer;
+  transform-style:preserve-3d;transition:transform .5s cubic-bezier(.4,.2,.2,1);
+}
+.flash-card.flipped{transform:rotateY(180deg);}
+.flash-face{
+  position:absolute;inset:0;backface-visibility:hidden;border-radius:18px;
+  border:1px solid var(--card-border);background:var(--card);box-shadow:var(--shadow);
+  padding:26px;display:flex;flex-direction:column;justify-content:center;
+}
+.flash-face.back{transform:rotateY(180deg);}
+.flash-tag{align-self:flex-start;margin-bottom:12px;}
+.flash-face .q{font-family:var(--font-serif);font-size:17px;line-height:1.4;}
+.flash-face .a{font-size:14px;line-height:1.6;color:var(--text);}
+.flash-hint{font-size:11px;color:var(--text-dim);position:absolute;bottom:14px;right:18px;}
+.flash-nav{display:flex;align-items:center;gap:14px;}
+.flash-nav button{
+  border:1px solid var(--card-border);background:var(--card);color:var(--text);
+  width:38px;height:38px;border-radius:50%;cursor:pointer;font-size:16px;
+}
+.flash-count{font-size:12.5px;color:var(--text-dim);min-width:64px;text-align:center;}
+
+footer.foot{margin-top:40px;text-align:center;font-size:11.5px;color:var(--text-dim);}
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="top-row">
+    <div class="brand">
+      <div class="brand-mark">🧪</div>
+      <div>
+        <h1>Lab 1 · Biologically Important Molecules</h1>
+        <p>BIO201B — Carbohydrates · Proteins · Lipids · Nucleic Acids</p>
+      </div>
+    </div>
+    <button class="theme-btn" id="themeBtn" title="Toggle theme">◐</button>
+  </div>
+  <nav class="tabs" id="tabs">
+    <button data-view="cheatsheet" class="active">📋 Cheat Sheet</button>
+    <button data-view="lab">🧫 Virtual Rack</button>
+    <button data-view="unknown">🔍 Unknown ID Challenge</button>
+    <button data-view="quiz">🗂️ Flashcards</button>
+  </nav>
+</header>
+
+<div class="wrap">
+<main>
+
+  <!-- ============ CHEAT SHEET ============ -->
+  <section class="view active" id="view-cheatsheet">
+    <h2 class="section-title">Quick-memorization cheat sheet</h2>
+    <p class="section-sub">All five biochemical tests, exactly as recorded on the worksheet. Tap any test in the Virtual Rack tab to see it animated.</p>
+
+    <div class="legend-row">
+      <span class="legend-chip"><span class="legend-dot" style="background:var(--accent-carb)"></span>Carbohydrates</span>
+      <span class="legend-chip"><span class="legend-dot" style="background:var(--accent-protein)"></span>Proteins</span>
+      <span class="legend-chip"><span class="legend-dot" style="background:var(--accent-lipid)"></span>Lipids</span>
+      <span class="legend-chip"><span class="legend-dot" style="background:var(--accent-nucleic)"></span>Nucleic Acids</span>
+    </div>
+
+    <div class="card controls-box">
+      <h3>Positive vs. negative controls — the logic</h3>
+      <div class="controls-grid">
+        <div><b>Positive control</b> contains the variable being tested for. It reacts positively and proves the test can actually detect what you expect — it shows you what a true positive looks like.</div>
+        <div><b>Negative control</b> contains only the solvent (usually distilled water, no solute). It shows what a true negative looks like, so any color change elsewhere can be trusted.</div>
+      </div>
+    </div>
+
+    <div class="card controls-box">
+      <h3>Background concepts</h3>
+      <div class="controls-grid">
+        <div><b>Lipids</b> are a diverse group of hydrophobic molecules. The unifying feature of a lipid is little or no affinity for water — lipids are water-fearing. The three most biologically important types of lipid are <b>fats, phospholipids, and steroids</b>.</div>
+        <div><b>DNA structure</b> — DNA is usually double-stranded, with the two strands held together by hydrogen bonds between nitrogen bases. That double strand is twisted into a double helix.</div>
+      </div>
+    </div>
+
+    <div class="sheet-scroll">
+    <div class="card">
+      <table class="sheet-table">
+        <thead>
+          <tr><th>Test</th><th>Reagent</th><th>Detects / target bond</th><th>Positive result</th><th>Negative result</th><th>Controls</th></tr>
+        </thead>
+        <tbody id="cheatBody"></tbody>
+      </table>
+    </div>
+    </div>
+  </section>
+
+  <!-- ============ VIRTUAL RACK ============ -->
+  <section class="view" id="view-lab">
+    <h2 class="section-title">Virtual test-tube rack</h2>
+    <p class="section-sub">Pick a test, run the procedure, then tap any tube to see exactly what the worksheet recorded and why.</p>
+
+    <div class="test-picker" id="testPicker"></div>
+
+    <div class="lab-panel">
+      <div class="card rack-card">
+        <div class="rack-head">
+          <div>
+            <h3 id="rackTitle"></h3>
+            <p id="rackDesc"></p>
+          </div>
+          <button class="run-btn" id="runBtn">Add reagent ▶</button>
+        </div>
+        <details class="procedure-box" id="procedureBox" open>
+          <summary>Procedure (from the lab worksheet)</summary>
+          <ol id="procedureList"></ol>
+        </details>
+        <div class="tube-grid" id="tubeGrid"></div>
+      </div>
+
+      <div class="card detail-card" id="detailCard">
+        <div class="detail-empty">Tap a tube to see its full breakdown.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ UNKNOWN CHALLENGE ============ -->
+  <section class="view" id="view-unknown">
+    <h2 class="section-title">Unknown identification challenge</h2>
+    <p class="section-sub">Six mystery tubes, one hidden macromolecule each. Choose reagents strategically, read the color, then make your call.</p>
+
+    <div class="score-strip">
+      <div>Solved: <b id="scoreSolved">0</b> / 6</div>
+      <div>Tests run: <b id="scoreTests">0</b></div>
+    </div>
+
+    <div class="mystery-grid" id="mysteryGrid"></div>
+
+    <div class="card workbench" id="workbench" style="display:none;">
+      <div>
+        <h3 id="wbTitle">Choose a reagent</h3>
+        <div class="reagent-row" id="reagentRow"></div>
+        <div class="tube-grid" style="grid-template-columns:repeat(auto-fill,minmax(70px,1fr));">
+          <div class="tube-slot" style="cursor:default;">
+            <div class="tube" id="wbTube"><div class="tube-liquid" id="wbLiquid"><div class="tube-glint"></div></div><div class="tube-liquid layer2" id="wbLiquid2" style="height:0;"></div></div>
+            <div class="tube-num">Sample</div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <h3>Lab notebook</h3>
+        <div class="notebook" id="notebook"><p style="color:var(--text-dim);font-size:12.5px;">No tests run yet on this sample.</p></div>
+        <h3 style="margin-top:16px;">What is it?</h3>
+        <div class="guess-row" id="guessRow"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ FLASHCARDS ============ -->
+  <section class="view" id="view-quiz">
+    <h2 class="section-title">Worksheet flashcard drawer</h2>
+    <p class="section-sub">Every question from Exercises 1–4, plus core concepts. Tap a card to flip it.</p>
+
+    <div class="filter-row" id="filterRow"></div>
+
+    <div class="flash-wrap">
+      <div class="flash-scene">
+        <div class="flash-card" id="flashCard">
+          <div class="flash-face front">
+            <span class="pill flash-tag" id="flashTagFront">Concept</span>
+            <div class="q" id="flashQ"></div>
+            <div class="flash-hint">Tap to reveal answer</div>
+          </div>
+          <div class="flash-face back">
+            <span class="pill flash-tag" id="flashTagBack">Concept</span>
+            <div class="a" id="flashA"></div>
+            <div class="flash-hint">Tap to flip back</div>
+          </div>
+        </div>
+      </div>
+      <div class="flash-nav">
+        <button id="flashPrev">‹</button>
+        <div class="flash-count" id="flashCount">1 / 1</div>
+        <button id="flashNext">›</button>
+      </div>
+    </div>
+  </section>
+
+</main>
+<footer class="foot">BIO201B · Lab 1 study tool — built from the verified lab worksheets &amp; slide deck (Exercise 06).</footer>
+</div>
+
+<script>
+(function(){
+"use strict";
+
+/* ============================================================
+   THEME
+============================================================ */
+var themeBtn = document.getElementById('themeBtn');
+function applyStoredTheme(){
+  try{
+    var saved = localStorage.getItem('bio201b-theme');
+    if(saved === 'dark' || saved === 'light'){
+      document.documentElement.setAttribute('data-theme', saved);
+    }
+  }catch(e){}
+}
+applyStoredTheme();
+themeBtn.addEventListener('click', function(){
+  var cur = document.documentElement.getAttribute('data-theme');
+  var next;
+  if(cur === 'dark'){ next = 'light'; }
+  else if(cur === 'light'){ next = 'dark'; }
+  else {
+    var prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+    next = prefersDark ? 'light' : 'dark';
+  }
+  document.documentElement.setAttribute('data-theme', next);
+  try{ localStorage.setItem('bio201b-theme', next); }catch(e){}
+});
+
+/* ============================================================
+   TAB NAVIGATION
+============================================================ */
+var tabButtons = document.querySelectorAll('#tabs button');
+tabButtons.forEach(function(btn){
+  btn.addEventListener('click', function(){
+    tabButtons.forEach(function(b){ b.classList.remove('active'); });
+    btn.classList.add('active');
+    document.querySelectorAll('.view').forEach(function(v){ v.classList.remove('active'); });
+    document.getElementById('view-' + btn.dataset.view).classList.add('active');
+    window.scrollTo({top:0, behavior:'smooth'});
+  });
+});
+
+/* ============================================================
+   DATA — the five tests, exactly per worksheet
+============================================================ */
+var CAT = {
+  carb:    {name:'Carbohydrates', color:'var(--accent-carb)',    soft:'var(--accent-carb-soft)'},
+  protein: {name:'Proteins',      color:'var(--accent-protein)', soft:'var(--accent-protein-soft)'},
+  lipid:   {name:'Lipids',        color:'var(--accent-lipid)',   soft:'var(--accent-lipid-soft)'},
+  nucleic: {name:'Nucleic Acids', color:'var(--accent-nucleic)', soft:'var(--accent-nucleic-soft)'}
+};
+
+var TESTS = [
+  {
+    id:'benedict',
+    name:"Benedict's Test",
+    sub:"Reducing sugars",
+    cat:'carb',
+    reagent:"Benedict's reagent (Cu²⁺, blue) + 2 min boiling water bath",
+    target:"Free aldehyde (–CHO) / ketone (–C=O) groups that reduce Cu²⁺ → Cu₂O",
+    posColor:'Green → orange-red → brick red precipitate', posHex:'#c23a1e',
+    negColor:'Stays blue', negHex:'#2f5fa8',
+    posCtrl:'Reducing sugar solution', negCtrl:'Distilled water',
+    before:'#3d6fbd', beforeLabel:'Benedict\u2019s reagent blue',
+    steps:[
+      'Obtain seven tubes and number them 1\u20137.',
+      'Add one full dropper of each material to be tested to its tube (Table 1).',
+      'Add 2 mL (2 full droppers) of Benedict\u2019s solution to each tube.',
+      'Place all tubes in a gently boiling water bath for 2 minutes.',
+      'Remove the tubes and let them cool to room temperature.',
+      'Record the color of each tube\u2019s contents.'
+    ],
+    tubes:[
+      {label:'Onion juice', color:'Orange', hex:'#e08a1f', result:'pos', note:'Onions store carbohydrate as simple reducing sugars — strong positive.'},
+      {label:'Potato juice', color:'Greenish blue', hex:'#4f8f87', result:'trace', note:'Only a trace of reducing sugar — potatoes store carbohydrate mainly as starch, not free sugar.'},
+      {label:'Sucrose juice', color:'Blue (no change)', hex:'#2f5fa8', result:'neg', note:'Sucrose is a non-reducing disaccharide (the one disaccharide exception) — no free aldehyde/ketone to react.'},
+      {label:'Glucose solution', color:'Brownish red', hex:'#a3391c', result:'pos', note:'Glucose is a monosaccharide reducing sugar — strong positive, confirms the test works.'},
+      {label:'Distilled water', color:'Blue (no change)', hex:'#2f5fa8', result:'negctrl', note:'Negative control — solvent only, no reducing sugar present.'},
+      {label:'Reducing sugar solution', color:'Red', hex:'#c62a20', result:'posctrl', note:'Positive control — known reducing sugar, shows what a true positive looks like.'},
+      {label:'Starch solution', color:'Blue (no change)', hex:'#2f5fa8', result:'neg', note:'Starch is a polysaccharide with no free reducing ends available — negative.'}
+    ]
+  },
+  {
+    id:'iodine',
+    name:'Iodine Test',
+    sub:'Starch',
+    cat:'carb',
+    reagent:"Iodine (I₂/KI), 3 drops at room temperature",
+    target:"Coiled helical polysaccharide structure of starch traps iodine",
+    posColor:'Blue to bluish-black', posHex:'#171a2e',
+    negColor:'Stays brown / yellow (iodine\u2019s own color)', negHex:'#8a5a24',
+    posCtrl:'Starch solution', negCtrl:'Distilled water',
+    before:'#b9832f', beforeLabel:'Iodine reagent brown',
+    steps:[
+      'Obtain seven test tubes and number them 1\u20137.',
+      'Add one full dropper of each material to be tested to its tube (Table 2).',
+      'Add 3 drops of iodine to each tube.',
+      'Record the color of each tube\u2019s contents.'
+    ],
+    tubes:[
+      {label:'Onion juice', color:'Brown / yellow', hex:'#8a5a24', result:'neg', note:'No starch — onion carbohydrate is stored as simple sugars, not a coiled polymer.'},
+      {label:'Potato juice', color:'Bluish-black', hex:'#1a1a2e', result:'pos', note:'Potatoes store carbohydrate as starch — iodine slips into the coiled glucose helix and turns blue-black.'},
+      {label:'Sucrose juice', color:'Brown / yellow', hex:'#8a5a24', result:'neg', note:'A simple disaccharide, no coiled polymer for iodine to bind.'},
+      {label:'Glucose solution', color:'Brown / yellow', hex:'#8a5a24', result:'neg', note:'A monosaccharide — no starch structure present.'},
+      {label:'Distilled water', color:'Brown / yellow', hex:'#8a5a24', result:'negctrl', note:'Negative control — no starch, stays iodine\u2019s own color.'},
+      {label:'Reducing sugar solution', color:'Brown / yellow', hex:'#8a5a24', result:'neg', note:'Reducing sugars are not starch, so the iodine test is negative here even though Benedict\u2019s was positive.'},
+      {label:'Starch solution', color:'Blue to black', hex:'#16213e', result:'posctrl', note:'Positive control — pure starch, the coiled polymer iodine is diagnostic for.'}
+    ]
+  },
+  {
+    id:'biuret',
+    name:'Biuret Test',
+    sub:'Proteins / peptide bonds',
+    cat:'protein',
+    reagent:"Biuret reagent (Cu²⁺ in alkaline solution)",
+    target:"Peptide (C–N) bonds — a Cu²⁺ must complex with 4–6 peptide bonds to produce color",
+    posColor:'Light blue → violet', posHex:'#7b3fa0',
+    negColor:'Stays sky blue', negHex:'#6ec6e8',
+    posCtrl:'Protein solution', negCtrl:'Distilled water',
+    before:'#6ec6e8', beforeLabel:'Biuret reagent sky blue',
+    steps:[
+      'Obtain 4 clean tubes and number them.',
+      'Add 2 mL (or 2 full droppers) of the solutions listed in Table 3 to each tube.',
+      'Add 2 mL (or 2 full droppers) of Biuret reagent and mix.',
+      'Record the color of each tube\u2019s contents in Table 3.'
+    ],
+    tubes:[
+      {label:'Tube 1 · Egg albumin', color:'Violet', hex:'#7b3fa0', result:'pos', note:'Egg albumin is a protein rich in peptide bonds — strong violet color.'},
+      {label:'Tube 2 · Distilled water', color:'Sky blue', hex:'#6ec6e8', result:'negctrl', note:'Negative control — no protein, reagent stays its own blue.'},
+      {label:'Tube 3 · Amino acid solution', color:'Sky blue', hex:'#6ec6e8', result:'neg', note:'Free amino acids are not linked by peptide bonds — they \u201cswim freely,\u201d so no Cu²⁺ complex forms.'},
+      {label:'Tube 4 · Protein solution', color:'Violet', hex:'#7b3fa0', result:'posctrl', note:'Positive control — known protein with many peptide bonds.'},
+      {label:'Tube 5 · Honey solution', color:'Brown', hex:'#8b5a2b', result:'neg', note:'Honey is sugar, not protein — no peptide bonds, no violet color.'}
+    ]
+  },
+  {
+    id:'sudan',
+    name:'Sudan IV Test',
+    sub:'Lipids',
+    cat:'lipid',
+    reagent:"Sudan IV, a fat-soluble red dye in a non-polar solvent",
+    target:"Non-polar, hydrophobic character of lipids",
+    posColor:'1 layer — homogeneous red', posHex:'#c23225',
+    negColor:'2 layers — heterogeneous', negHex:'#c23225',
+    posCtrl:'Known lipid solution', negCtrl:'Distilled water',
+    before:'#e7dcae', beforeLabel:'sample before dye added',
+    steps:[
+      'Obtain 4 clean tubes and number them.',
+      'Add the material listed in Table 4 to each tube and mix.',
+      'Record the color (and number of layers) of each tube\u2019s contents in Table 4.'
+    ],
+    tubes:[
+      {label:'Tube 1 · Salad oil', color:'1 layer, red', hex:'#c23225', result:'pos', note:'Oil is a lipid — the non-polar dye dissolves fully in, giving one homogeneous red mixture.', layers:1},
+      {label:'Tube 2 · Egg albumin', color:'2 layers', hex:'#c23225', result:'neg', note:'Egg albumin is a protein, not a lipid — it\u2019s largely aqueous, so the dye layer separates out.', layers:2},
+      {label:'Tube 3 · Distilled water', color:'2 layers', hex:'#c23225', result:'negctrl', note:'Negative control — water is polar, dye separates into its own layer.', layers:2},
+      {label:'Tube 4 · Known lipid solution', color:'1 layer, red', hex:'#c23225', result:'posctrl', note:'Positive control — confirmed lipid, one homogeneous red layer.', layers:1}
+    ]
+  },
+  {
+    id:'dische',
+    name:'Dische Diphenylamine Test',
+    sub:'DNA',
+    cat:'nucleic',
+    reagent:"Dische diphenylamine reagent, boiled 10 min then ice-bath cooled",
+    target:"Deoxyribose sugar (acid-converted, binds diphenylamine → blue complex)",
+    posColor:'Blue (intensity ∝ DNA concentration)', posHex:'#1c3a63',
+    negColor:'Clear / colorless', negHex:'#dfe6ea',
+    posCtrl:'2 mL DNA solution', negCtrl:'2 mL distilled water',
+    before:'#eef1f3', beforeLabel:'sample before reagent',
+    steps:[
+      'Obtain four test tubes and number them 1\u20134.',
+      'Add the materials listed in Table 6.4 (or 6.5) to each tube.',
+      'Add 2 mL of the Dische diphenylamine reagent to each tube and mix thoroughly.',
+      'Place the tubes in a gently boiling water bath to speed the reaction.',
+      'After 10 minutes, transfer the tubes to an ice bath. Gently mix and observe the color as the tubes cool. Record your observations.'
+    ],
+    tubes:[
+      {label:'Tube 1 · 2 mL DNA solution', color:'Dark blue', hex:'#122a4a', result:'posctrl', note:'Highest deoxyribose concentration — darkest blue complex.'},
+      {label:'Tube 2 · 1 mL DNA + 1 mL water', color:'Light blue', hex:'#4d76a3', result:'pos', note:'Diluted DNA — still positive, but a lighter blue because less deoxyribose is present.'},
+      {label:'Tube 3 · 2 mL RNA solution', color:'Clear / colorless', hex:'#dfe6ea', result:'neg', note:'RNA contains ribose, not deoxyribose, so it does not form the blue complex.'},
+      {label:'Tube 4 · 2 mL distilled water', color:'Clear / colorless', hex:'#dfe6ea', result:'negctrl', note:'Negative control — no nucleic acid, no deoxyribose, no reaction.'}
+    ]
+  }
+];
+
+var RESULT_META = {
+  pos:{label:'Positive', pillClass:'pos'},
+  neg:{label:'Negative', pillClass:'neg'},
+  posctrl:{label:'Positive control', pillClass:'pos-ctrl'},
+  negctrl:{label:'Negative control', pillClass:'neg-ctrl'},
+  trace:{label:'Trace / weak positive', pillClass:'pos'}
+};
+
+/* ============================================================
+   CHEAT SHEET RENDER
+============================================================ */
+var cheatBody = document.getElementById('cheatBody');
+TESTS.forEach(function(t){
+  var c = CAT[t.cat];
+  var tr = document.createElement('tr');
+  tr.innerHTML =
+    '<td><div class="test-name" style="color:'+c.color+'">'+t.name+'<small>'+t.sub+'</small></div></td>'+
+    '<td>'+t.reagent+'</td>'+
+    '<td>'+t.target+'</td>'+
+    '<td><span class="swatch-inline"><span class="swatch-dot" style="background:'+t.posHex+'"></span>'+t.posColor+'</span></td>'+
+    '<td><span class="swatch-inline"><span class="swatch-dot" style="background:'+t.negHex+'"></span>'+t.negColor+'</span></td>'+
+    '<td>+ '+t.posCtrl+'<br>&minus; '+t.negCtrl+'</td>';
+  cheatBody.appendChild(tr);
+});
+
+/* ============================================================
+   VIRTUAL RACK
+============================================================ */
+var testPicker = document.getElementById('testPicker');
+var rackTitle = document.getElementById('rackTitle');
+var rackDesc = document.getElementById('rackDesc');
+var tubeGrid = document.getElementById('tubeGrid');
+var runBtn = document.getElementById('runBtn');
+var detailCard = document.getElementById('detailCard');
+
+var currentTestId = TESTS[0].id;
+var reacted = false;
+var selectedTubeIndex = null;
+
+TESTS.forEach(function(t){
+  var c = CAT[t.cat];
+  var b = document.createElement('button');
+  b.innerHTML = '<span class="dot" style="background:'+c.color+'"></span>'+t.name;
+  b.dataset.id = t.id;
+  b.addEventListener('click', function(){
+    currentTestId = t.id;
+    reacted = false;
+    selectedTubeIndex = null;
+    renderRack();
+  });
+  testPicker.appendChild(b);
+});
+
+function getTest(id){
+  for(var i=0;i<TESTS.length;i++){ if(TESTS[i].id === id) return TESTS[i]; }
+  return TESTS[0];
+}
+
+function renderRack(){
+  var t = getTest(currentTestId);
+  var c = CAT[t.cat];
+
+  Array.from(testPicker.children).forEach(function(btn){
+    btn.classList.toggle('active', btn.dataset.id === t.id);
+    btn.style.borderColor = btn.dataset.id === t.id ? c.color : '';
+    btn.style.background = btn.dataset.id === t.id ? c.soft : '';
+  });
+
+  rackTitle.textContent = t.name + ' — ' + t.sub;
+  rackDesc.textContent = t.reagent + '.';
+  runBtn.textContent = reacted ? '↺ Reset tubes' : 'Add reagent ▶';
+
+  var procList = document.getElementById('procedureList');
+  procList.innerHTML = '';
+  (t.steps || []).forEach(function(s){
+    var li = document.createElement('li');
+    li.textContent = s;
+    procList.appendChild(li);
+  });
+
+  tubeGrid.innerHTML = '';
+  t.tubes.forEach(function(tube, idx){
+    var slot = document.createElement('button');
+    slot.className = 'tube-slot' + (selectedTubeIndex === idx ? ' selected' : '');
+    slot.addEventListener('click', function(){
+      selectedTubeIndex = idx;
+      renderRack();
+      renderDetail();
+    });
+
+    var tubeEl = document.createElement('div');
+    tubeEl.className = 'tube';
+
+    if(t.id === 'sudan'){
+      var liquid = document.createElement('div');
+      liquid.className = 'tube-liquid';
+      var liquid2 = document.createElement('div');
+      liquid2.className = 'tube-liquid layer2';
+      if(!reacted){
+        liquid.style.height = '55%';
+        liquid.style.background = t.before;
+        liquid2.style.height = '0%';
+      } else if(tube.layers === 1){
+        liquid.style.height = '58%';
+        liquid.style.background = tube.hex;
+        liquid2.style.height = '0%';
+      } else {
+        liquid.style.height = '30%';
+        liquid.style.background = tube.hex;
+        liquid2.style.bottom = '30%';
+        liquid2.style.height = '28%';
+        liquid2.style.background = t.before;
+      }
+      var glint = document.createElement('div');
+      glint.className = 'tube-glint';
+      liquid.appendChild(glint);
+      tubeEl.appendChild(liquid);
+      tubeEl.appendChild(liquid2);
+    } else {
+      var liq = document.createElement('div');
+      liq.className = 'tube-liquid';
+      liq.style.height = '58%';
+      liq.style.background = reacted ? tube.hex : t.before;
+      var glint2 = document.createElement('div');
+      glint2.className = 'tube-glint';
+      liq.appendChild(glint2);
+      tubeEl.appendChild(liq);
+    }
+
+    var num = document.createElement('div');
+    num.className = 'tube-num';
+    num.textContent = String(idx+1);
+
+    var lab = document.createElement('div');
+    lab.className = 'tube-label';
+    lab.textContent = tube.label;
+
+    slot.appendChild(tubeEl);
+    slot.appendChild(num);
+    slot.appendChild(lab);
+    tubeGrid.appendChild(slot);
+  });
+}
+
+runBtn.addEventListener('click', function(){
+  reacted = !reacted;
+  renderRack();
+  if(selectedTubeIndex !== null) renderDetail();
+});
+
+function renderDetail(){
+  var t = getTest(currentTestId);
+  if(selectedTubeIndex === null){
+    detailCard.innerHTML = '<div class="detail-empty">Tap a tube to see its full breakdown.</div>';
+    return;
+  }
+  var tube = t.tubes[selectedTubeIndex];
+  var meta = RESULT_META[tube.result];
+  var shownColor = reacted ? tube.color : (t.beforeLabel || 'unreacted');
+  var shownHex = reacted ? tube.hex : t.before;
+
+  detailCard.innerHTML =
+    '<span class="pill '+meta.pillClass+'">'+meta.label+'</span>'+
+    '<h3 style="margin-top:10px;">'+tube.label+'</h3>'+
+    '<p class="sub">'+t.name+'</p>'+
+    '<div class="detail-row"><span>Reagent</span><span>'+t.reagent.split(',')[0]+'</span></div>'+
+    '<div class="detail-row"><span>Color now</span><span><span class="swatch-inline"><span class="swatch-dot" style="background:'+shownHex+'"></span>'+shownColor+'</span></span></div>'+
+    '<div class="detail-row"><span>Worksheet result</span><span><span class="swatch-inline"><span class="swatch-dot" style="background:'+tube.hex+'"></span>'+tube.color+'</span></span></div>'+
+    (!reacted ? '<div class="detail-row"><span>Status</span><span>Reagent not yet added — press \u201cAdd reagent\u201d</span></div>' : '') +
+    '<div class="detail-note">'+tube.note+'</div>';
+}
+
+renderRack();
+
+/* ============================================================
+   UNKNOWN IDENTIFICATION CHALLENGE
+============================================================ */
+var TYPES = {
+  'reducing-sugar': {label:'Reducing sugar (e.g. glucose)'},
+  'nonreducing-sugar': {label:'Non-reducing sugar (e.g. sucrose)'},
+  'starch': {label:'Starch'},
+  'protein': {label:'Protein'},
+  'lipid': {label:'Lipid'},
+  'dna': {label:'DNA'},
+  'rna': {label:'RNA'}
+};
+var TYPE_ORDER = ['reducing-sugar','nonreducing-sugar','starch','protein','lipid','dna','rna'];
+
+var REAGENTS = ['benedict','iodine','biuret','sudan','dische'];
+var REAGENT_LABEL = {benedict:"Benedict\u2019s", iodine:'Iodine', biuret:'Biuret', sudan:'Sudan IV', dische:'Dische'};
+
+// reaction matrix: [reagent][trueType] -> {hex,label,pos}
+var MATRIX = {
+  benedict:{
+    'reducing-sugar':{hex:'#c62a20',label:'Red / brick precipitate',pos:true},
+    'nonreducing-sugar':{hex:'#2f5fa8',label:'Stays blue',pos:false},
+    'starch':{hex:'#2f5fa8',label:'Stays blue',pos:false},
+    'protein':{hex:'#2f5fa8',label:'Stays blue',pos:false},
+    'lipid':{hex:'#2f5fa8',label:'Stays blue',pos:false},
+    'dna':{hex:'#2f5fa8',label:'Stays blue',pos:false},
+    'rna':{hex:'#2f5fa8',label:'Stays blue',pos:false}
+  },
+  iodine:{
+    'reducing-sugar':{hex:'#8a5a24',label:'Brown / yellow',pos:false},
+    'nonreducing-sugar':{hex:'#8a5a24',label:'Brown / yellow',pos:false},
+    'starch':{hex:'#171a2e',label:'Bluish-black',pos:true},
+    'protein':{hex:'#8a5a24',label:'Brown / yellow',pos:false},
+    'lipid':{hex:'#8a5a24',label:'Brown / yellow',pos:false},
+    'dna':{hex:'#8a5a24',label:'Brown / yellow',pos:false},
+    'rna':{hex:'#8a5a24',label:'Brown / yellow',pos:false}
+  },
+  biuret:{
+    'reducing-sugar':{hex:'#6ec6e8',label:'Stays sky blue',pos:false},
+    'nonreducing-sugar':{hex:'#6ec6e8',label:'Stays sky blue',pos:false},
+    'starch':{hex:'#6ec6e8',label:'Stays sky blue',pos:false},
+    'protein':{hex:'#7b3fa0',label:'Violet',pos:true},
+    'lipid':{hex:'#6ec6e8',label:'Stays sky blue',pos:false},
+    'dna':{hex:'#6ec6e8',label:'Stays sky blue',pos:false},
+    'rna':{hex:'#6ec6e8',label:'Stays sky blue',pos:false}
+  },
+  sudan:{
+    'reducing-sugar':{hex:'#c23225',label:'2 layers (heterogeneous)',pos:false},
+    'nonreducing-sugar':{hex:'#c23225',label:'2 layers (heterogeneous)',pos:false},
+    'starch':{hex:'#c23225',label:'2 layers (heterogeneous)',pos:false},
+    'protein':{hex:'#c23225',label:'2 layers (heterogeneous)',pos:false},
+    'lipid':{hex:'#c23225',label:'1 layer, red (homogeneous)',pos:true},
+    'dna':{hex:'#c23225',label:'2 layers (heterogeneous)',pos:false},
+    'rna':{hex:'#c23225',label:'2 layers (heterogeneous)',pos:false}
+  },
+  dische:{
+    'reducing-sugar':{hex:'#dfe6ea',label:'Clear / colorless',pos:false},
+    'nonreducing-sugar':{hex:'#dfe6ea',label:'Clear / colorless',pos:false},
+    'starch':{hex:'#dfe6ea',label:'Clear / colorless',pos:false},
+    'protein':{hex:'#dfe6ea',label:'Clear / colorless',pos:false},
+    'lipid':{hex:'#dfe6ea',label:'Clear / colorless',pos:false},
+    'dna':{hex:'#1c3a63',label:'Blue complex',pos:true},
+    'rna':{hex:'#dfe6ea',label:'Clear / colorless (ribose, not deoxyribose)',pos:false}
+  }
+};
+
+var MYSTERIES = [
+  {id:'alpha', name:'Mystery Alpha', trueType:'reducing-sugar'},
+  {id:'beta', name:'Mystery Beta', trueType:'starch'},
+  {id:'gamma', name:'Mystery Gamma', trueType:'protein'},
+  {id:'delta', name:'Mystery Delta', trueType:'lipid'},
+  {id:'epsilon', name:'Mystery Epsilon', trueType:'dna'},
+  {id:'zeta', name:'Mystery Zeta', trueType:'nonreducing-sugar'}
+];
+MYSTERIES.forEach(function(m){ m.testsRun = []; m.solved = false; m.guessedWrong = []; });
+
+var totalTestsRun = 0;
+var activeMysteryId = null;
+
+var mysteryGrid = document.getElementById('mysteryGrid');
+var workbench = document.getElementById('workbench');
+var wbTitle = document.getElementById('wbTitle');
+var reagentRow = document.getElementById('reagentRow');
+var wbLiquid = document.getElementById('wbLiquid');
+var wbLiquid2 = document.getElementById('wbLiquid2');
+var notebook = document.getElementById('notebook');
+var guessRow = document.getElementById('guessRow');
+var scoreSolved = document.getElementById('scoreSolved');
+var scoreTests = document.getElementById('scoreTests');
+
+function getMystery(id){
+  for(var i=0;i<MYSTERIES.length;i++){ if(MYSTERIES[i].id===id) return MYSTERIES[i]; }
+  return null;
+}
+
+function renderMysteryGrid(){
+  mysteryGrid.innerHTML = '';
+  MYSTERIES.forEach(function(m){
+    var card = document.createElement('button');
+    card.className = 'mystery-card' + (activeMysteryId === m.id ? ' selected' : '');
+    card.innerHTML =
+      '<h4>'+m.name+'</h4>'+
+      '<p>'+m.testsRun.length+' test(s) run</p>'+
+      '<div class="status '+(m.solved?'solved':'open')+'">'+(m.solved ? '✓ Identified' : 'Unsolved')+'</div>';
+    card.addEventListener('click', function(){
+      activeMysteryId = m.id;
+      renderMysteryGrid();
+      renderWorkbench();
+    });
+    mysteryGrid.appendChild(card);
+  });
+  scoreSolved.textContent = MYSTERIES.filter(function(m){return m.solved;}).length;
+  scoreTests.textContent = totalTestsRun;
+}
+
+function renderWorkbench(){
+  var m = getMystery(activeMysteryId);
+  if(!m){ workbench.style.display = 'none'; return; }
+  workbench.style.display = 'grid';
+  wbTitle.textContent = m.name + (m.solved ? ' — identified' : ' — choose a reagent');
+
+  reagentRow.innerHTML = '';
+  REAGENTS.forEach(function(r){
+    var used = m.testsRun.indexOf(r) !== -1;
+    var b = document.createElement('button');
+    b.textContent = REAGENT_LABEL[r] + (used ? ' ✓' : '');
+    b.disabled = used || m.solved;
+    b.addEventListener('click', function(){
+      runReagentOnMystery(m, r);
+    });
+    reagentRow.appendChild(b);
+  });
+
+  // liquid preview = most recent test, or neutral
+  if(m.testsRun.length){
+    var lastReagent = m.testsRun[m.testsRun.length-1];
+    var res = MATRIX[lastReagent][m.trueType];
+    if(lastReagent === 'sudan'){
+      if(res.pos){
+        wbLiquid.style.height='58%'; wbLiquid.style.background=res.hex;
+        wbLiquid2.style.height='0%';
+      } else {
+        wbLiquid.style.height='30%'; wbLiquid.style.background=res.hex;
+        wbLiquid2.style.bottom='30%'; wbLiquid2.style.height='28%'; wbLiquid2.style.background='#e7dcae';
+      }
+    } else {
+      wbLiquid.style.height='58%'; wbLiquid.style.background=res.hex;
+      wbLiquid2.style.height='0%';
+    }
+  } else {
+    wbLiquid.style.height='45%'; wbLiquid.style.background='#cfd6da';
+    wbLiquid2.style.height='0%';
+  }
+
+  // notebook
+  if(!m.testsRun.length){
+    notebook.innerHTML = '<p style="color:var(--text-dim);font-size:12.5px;">No tests run yet on this sample.</p>';
+  } else {
+    notebook.innerHTML = '';
+    m.testsRun.forEach(function(r){
+      var res = MATRIX[r][m.trueType];
+      var row = document.createElement('div');
+      row.className = 'notebook-entry';
+      row.innerHTML = '<div class="notebook-swatch" style="background:'+res.hex+'"></div>'+
+        '<div><b>'+REAGENT_LABEL[r]+'</b> — '+res.label+' <span style="color:var(--text-dim);">('+(res.pos?'positive':'negative')+')</span></div>';
+      notebook.appendChild(row);
+    });
+  }
+
+  // guesses
+  guessRow.innerHTML = '';
+  TYPE_ORDER.forEach(function(ty){
+    var b = document.createElement('button');
+    b.textContent = TYPES[ty].label;
+    if(m.solved && ty === m.trueType) b.classList.add('correct');
+    if(m.guessedWrong.indexOf(ty) !== -1) b.classList.add('wrong');
+    b.disabled = m.solved;
+    b.addEventListener('click', function(){
+      if(ty === m.trueType){
+        m.solved = true;
+      } else {
+        if(m.guessedWrong.indexOf(ty) === -1) m.guessedWrong.push(ty);
+      }
+      renderMysteryGrid();
+      renderWorkbench();
+    });
+    guessRow.appendChild(b);
+  });
+}
+
+function runReagentOnMystery(m, reagent){
+  if(m.testsRun.indexOf(reagent) !== -1 || m.solved) return;
+  m.testsRun.push(reagent);
+  totalTestsRun++;
+  renderMysteryGrid();
+  renderWorkbench();
+}
+
+renderMysteryGrid();
+
+/* ============================================================
+   FLASHCARDS
+============================================================ */
+var FLASHCARDS = [
+  {cat:'concept', q:'What defines a positive control in a biochemical test?', a:'It contains the variable being tested for. It reacts positively and demonstrates that the test can actually detect what you expect — it shows what a true positive looks like.'},
+  {cat:'concept', q:'What defines a negative control in a biochemical test?', a:'It contains only the solvent (often distilled water, no solutes) — no variable being tested for. It shows what a true negative looks like, so you can trust any color change elsewhere.'},
+  {cat:'carb', q:'Benedict\u2019s test: which is a positive control, and which is a negative control?', a:'Positive control: the reducing sugar solution (and glucose). Negative control: distilled water.'},
+  {cat:'carb', q:'Which is a reducing sugar, sucrose or glucose — and how do you know?', a:'Glucose. Benedict\u2019s test turned it brownish-red (positive), while sucrose stayed blue (negative) — sucrose is a non-reducing disaccharide.'},
+  {cat:'carb', q:'Which contains more reducing sugars: potato juice or onion juice? How do you know?', a:'Onion juice — it turned orange (strong positive) in Benedict\u2019s test, while potato juice only turned greenish-blue (just a trace).'},
+  {cat:'carb', q:'What does this tell you about how sugars are stored in onions vs. potatoes?', a:'Onions store carbohydrate as simple reducing sugars. Potatoes store carbohydrate mainly as starch, not free reducing sugar.'},
+  {cat:'carb', q:'Iodine test: which is the positive control, and which is the negative control?', a:'Positive control: starch solution. Negative control: distilled water.'},
+  {cat:'carb', q:'Which colors more intensely with iodine, onion juice or potato juice? Why?', a:'Potato juice — it turns bluish-black because potatoes store carbohydrate as starch, which iodine specifically detects.'},
+  {cat:'carb', q:'In what part of a plant is starch typically stored?', a:'In roots and tubers (e.g. potatoes).'},
+  {cat:'protein', q:'Biuret test: which is the positive control, and which is the negative control?', a:'Positive control: the protein solution. Negative control: distilled water.'},
+  {cat:'protein', q:'Which contains more protein (C\u2013N bonds): egg albumin or honey? How can you tell?', a:'Egg albumin — it turned violet in the Biuret test, showing abundant peptide bonds. Honey stayed unchanged/brown, since it\u2019s sugar with no peptide bonds.'},
+  {cat:'protein', q:'Do free amino acids have peptide bonds?', a:'No. Free amino acids exist individually (\u201cswimming freely,\u201d not linked together), so they test negative in the Biuret test — a Cu²⁺ needs 4\u20136 peptide bonds in a row to produce color.'},
+  {cat:'lipid', q:'Does egg albumin contain much lipid?', a:'No — it tested negative in the Sudan IV test, forming 2 separate layers instead of one homogeneous red layer.'},
+  {cat:'lipid', q:'Lipids supply more than twice the calories per gram as carbohydrates. Based on the Sudan IV results, which contains more calories: oil or honey/albumin?', a:'Oil — it tested positive for lipid (one homogeneous red layer with Sudan IV), and lipids pack far more calories per gram than the sugars/protein in honey or egg albumin.'},
+  {cat:'nucleic', q:'Dische diphenylamine test: how does the color compare between tube 1 (2 mL DNA) and tube 2 (1 mL DNA + 1 mL water)? Why?', a:'Tube 1 is darker blue than tube 2, because it has a higher concentration of deoxyribose — the blue complex intensity is proportional to DNA concentration.'},
+  {cat:'nucleic', q:'Do DNA and RNA react alike in the Dische diphenylamine test? Why or why not?', a:'No. DNA contains deoxyribose, which reacts under acidic conditions with diphenylamine to form a blue complex. RNA contains ribose instead of deoxyribose, so it does not form this blue complex and stays clear/colorless.'},
+  {cat:'concept', q:'Why does Benedict\u2019s test require boiling, while the iodine test does not?', a:'Benedict\u2019s relies on a redox reaction (Cu²⁺ → Cu₂O) that needs heat energy to proceed at a visible rate. The iodine-starch interaction is a simple physical trapping of iodine in the helical structure of starch, which happens at room temperature.'}
+];
+
+var CATS_FILTER = [
+  {id:'all', label:'All'},
+  {id:'concept', label:'Concepts'},
+  {id:'carb', label:'Carbohydrates'},
+  {id:'protein', label:'Proteins'},
+  {id:'lipid', label:'Lipids'},
+  {id:'nucleic', label:'Nucleic Acids'}
+];
+var CAT_PILL_LABEL = {concept:'Concept', carb:'Carbohydrates', protein:'Proteins', lipid:'Lipids', nucleic:'Nucleic Acids'};
+var CAT_PILL_COLOR = {concept:'var(--text-dim)', carb:'var(--accent-carb)', protein:'var(--accent-protein)', lipid:'var(--accent-lipid)', nucleic:'var(--accent-nucleic)'};
+
+var filterRow = document.getElementById('filterRow');
+var currentFilter = 'all';
+var filteredCards = FLASHCARDS.slice();
+var cardIndex = 0;
+var isFlipped = false;
+
+CATS_FILTER.forEach(function(f){
+  var b = document.createElement('button');
+  b.textContent = f.label;
+  b.dataset.id = f.id;
+  if(f.id === 'all') b.classList.add('active');
+  b.addEventListener('click', function(){
+    currentFilter = f.id;
+    Array.from(filterRow.children).forEach(function(c){ c.classList.toggle('active', c.dataset.id === f.id); });
+    filteredCards = f.id === 'all' ? FLASHCARDS.slice() : FLASHCARDS.filter(function(c){ return c.cat === f.id; });
+    cardIndex = 0;
+    isFlipped = false;
+    renderFlash();
+  });
+  filterRow.appendChild(b);
+});
+
+var flashCard = document.getElementById('flashCard');
+var flashQ = document.getElementById('flashQ');
+var flashA = document.getElementById('flashA');
+var flashTagFront = document.getElementById('flashTagFront');
+var flashTagBack = document.getElementById('flashTagBack');
+var flashCount = document.getElementById('flashCount');
+
+function renderFlash(){
+  if(!filteredCards.length){
+    flashQ.textContent = 'No cards in this category.';
+    flashA.textContent = '';
+    flashCount.textContent = '0 / 0';
+    return;
+  }
+  var c = filteredCards[cardIndex];
+  flashQ.textContent = c.q;
+  flashA.textContent = c.a;
+  flashTagFront.textContent = CAT_PILL_LABEL[c.cat];
+  flashTagBack.textContent = CAT_PILL_LABEL[c.cat];
+  flashTagFront.style.background = 'transparent';
+  flashTagFront.style.border = '1px solid ' + CAT_PILL_COLOR[c.cat];
+  flashTagFront.style.color = CAT_PILL_COLOR[c.cat];
+  flashTagBack.style.background = 'transparent';
+  flashTagBack.style.border = '1px solid ' + CAT_PILL_COLOR[c.cat];
+  flashTagBack.style.color = CAT_PILL_COLOR[c.cat];
+  flashCount.textContent = (cardIndex+1) + ' / ' + filteredCards.length;
+  flashCard.classList.toggle('flipped', isFlipped);
+}
+
+flashCard.addEventListener('click', function(){
+  isFlipped = !isFlipped;
+  flashCard.classList.toggle('flipped', isFlipped);
+});
+document.getElementById('flashPrev').addEventListener('click', function(){
+  if(!filteredCards.length) return;
+  cardIndex = (cardIndex - 1 + filteredCards.length) % filteredCards.length;
+  isFlipped = false;
+  renderFlash();
+});
+document.getElementById('flashNext').addEventListener('click', function(){
+  if(!filteredCards.length) return;
+  cardIndex = (cardIndex + 1) % filteredCards.length;
+  isFlipped = false;
+  renderFlash();
+});
+
+renderFlash();
+
+})();
+</script>
+</body>
+</html>
